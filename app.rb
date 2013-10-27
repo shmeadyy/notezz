@@ -13,12 +13,19 @@ Dotenv.load
 ActiveRecord::Base.establish_connection(ENV['DATABASE_URL'])
 
 get '/' do
+  @title = 'Login | Recall'
 	erb :login
 end
 
-post '/users' do
-  User.create(username: params["username"], password: params["pwd"])
+post '/signup' do
+  @user = User.create(name: params["name"], username: params["username"], password: params["pwd"])
+  @user.save
   redirect '/notes'
+end
+
+post '/login' do
+  @user = User.find(params["username"], params["pwd"])
+  @user.save
 end
 
 get '/notes' do
